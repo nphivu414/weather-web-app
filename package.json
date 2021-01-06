@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "name": "weather-monorepo-app",
+  "workspaces": [
+      "packages/*"
+  ],
+  "scripts": {
+    "start-server": "yarn workspace server start",
+    "start-client": "yarn workspace client start",
+    "test-client": "yarn workspace client test",
+    "build-client": "yarn workspace client build"
+  }
+}

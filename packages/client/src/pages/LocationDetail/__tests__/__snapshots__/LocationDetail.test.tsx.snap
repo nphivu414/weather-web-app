@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LocationDetail renderTodayWeatherSection should match a snapshot 1`] = `ShallowWrapper {}`;
+
+exports[`LocationDetail should match a snapshot 1`] = `ShallowWrapper {}`;
