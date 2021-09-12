@@ -2,7 +2,7 @@ type FetcherParams = RequestInit & {
   uri: string;
 };
 
-const handleErrors = (response: Response) => {
+const handleHttpErrors = (response: Response) => {
   let errorMessage = '';
   switch (response.status) {
     case 404:
@@ -25,26 +25,38 @@ const handleErrors = (response: Response) => {
       break;
   }
 
-  throw {
-    statusCode: response.status,
+  return {
+    statusCode: response.status || 500,
     message: errorMessage,
   };
 };
 
-export const fetcher = <T>({ uri }: FetcherParams): Promise<T | null> => {
+const handleCustomErrors = (jsonResponse: any) => {
+  return {
+    statusCode: 200,
+    message: jsonResponse.error,
+  };
+};
+
+export const fetcher = <T>({ uri }: FetcherParams): Promise<T> => {
   return new Promise((resolve, reject) => {
     fetch(uri)
       .then(async (response) => {
         if (!response.ok) {
-          resolve(handleErrors(response));
+          return reject(handleHttpErrors(response));
         }
-        try {
-          const jsonResponse = await response.json();
-          resolve(jsonResponse);
-        } catch (error) {
-          resolve(null);
+        const jsonResponse = await response.json();
+        if (jsonResponse.error) {
+          return reject(handleCustomErrors(jsonResponse));
         }
+
+        resolve(jsonResponse);
       })
-      .catch(reject);
+      .catch((error: any) => {
+        reject({
+          statusCode: 500,
+          message: error.message,
+        });
+      });
   });
 };

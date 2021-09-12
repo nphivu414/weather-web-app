@@ -13,7 +13,7 @@ export type FetchLocationDetailParams = {
 };
 
 export const searchLocations = (fetchParams: SearchLocationParams) => {
-  return (): Promise<Place[] | null> => {
+  return (): Promise<Place[]> => {
     const queryString = qs.stringify(fetchParams);
     return fetcher<Place[]>({
       uri: `${URLS.LOCATION}/search?${queryString}`,

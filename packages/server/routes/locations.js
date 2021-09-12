@@ -20,7 +20,9 @@ router.get('/search', async function(req, res, next) {
     }
     res.json(response.data.slice(0, limit))
   } catch (error) {
-    res.json([]);
+    res.json({
+      error: 'Something went wrong'
+    });
   }
 });
 

@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { useQuery } from 'react-query';
 import AppBar from 'components/AppBar';
 import LocationSearchField from './LocationSearchField';
-import { searchLocations } from 'services';
 import { useDebounce } from 'hooks';
 import LocationList from './LocationList';
 import NavigationContext from 'navigation';
-import { Place, ServiceError } from 'types';
+import { Place } from 'types';
 import Spinner from 'components/Spinner';
+import { useSearchLocationQuery } from 'queries';
 
 export type HomeProps = {
   searchTerm: string;
@@ -36,17 +35,7 @@ export const onLocationItemClick = (
 export const Home: React.FC<HomeProps> = ({ searchTerm, setSearchTerm, setSelectedLocationId }) => {
   const { goNext, setNavigationTitle } = React.useContext(NavigationContext);
   const debouncedSearchTerm = useDebounce(searchTerm);
-  const { data, isLoading, isFetched, error, isError } = useQuery<Place[] | null, ServiceError>(
-    ['locations', debouncedSearchTerm],
-    searchLocations({
-      query: debouncedSearchTerm,
-    }),
-    {
-      enabled: debouncedSearchTerm !== '',
-      refetchOnWindowFocus: false,
-    },
-  );
-
+  const { data, isLoading, isFetched, error, isError } = useSearchLocationQuery(debouncedSearchTerm);
   return (
     <div>
       <AppBar title="Weather App" />

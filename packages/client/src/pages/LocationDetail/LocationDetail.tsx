@@ -1,12 +1,11 @@
 import * as React from 'react';
 import AppBar from 'components/AppBar';
 import NavigationContext from 'navigation';
-import { fetchLocationDetail } from 'services';
-import { useQuery } from 'react-query';
 import TodayWeatherSection from './TodayWeatherSection';
 import Spinner from 'components/Spinner';
 import DailyWeatherSection from './DailyWeatherSection';
-import { Place, ServiceError, Weather } from 'types';
+import { Weather } from 'types';
+import { useLocationDetailQuery } from 'queries';
 
 export type LocationDetailProps = {
   id: number | null;
@@ -30,15 +29,7 @@ export const renderTodayWeatherSection = (todayWeather: Weather) => {
 
 export const LocationDetail: React.FC<LocationDetailProps> = ({ id }) => {
   const { goBack, title } = React.useContext(NavigationContext);
-  const { data, isLoading, error, isError } = useQuery<Place | null, ServiceError>(
-    ['locationDetail', id],
-    fetchLocationDetail({
-      id,
-    }),
-    {
-      enabled: id !== null,
-    },
-  );
+  const { data, isLoading, error, isError } = useLocationDetailQuery(id);
   const weatherList = data?.consolidated_weather || [];
   const todayWeather = weatherList[0];
 
