@@ -38,3 +38,8 @@ Builds the React app for production to the build folder in packages/client.
   ```sh
    yarn build-client
    ```
+### Issues
+If you get this error code "UNABLE_TO_GET_ISSUER_CERT_LOCALLY" when running the back-end API, please add this line to your terminal environment (~/.bashrc, ~/.zshrc, or equivalent), then restart your terminal and run "yarn start-server" to start the back-end API again.
+```sh
+  export NODE_TLS_REJECT_UNAUTHORIZED = 0
+```
